@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/updateLocation.do</url>
+    <description>maj base </description>
+    <schedule>every 50 minutes</schedule>
+  </cron>
+</cronentries>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<title>Google Maps JavaScript API v3 Example: Marker Animations</title>
+<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+
+
+/**
+* Fonction de récupération des paramètres GET de la page
+* @return Array Tableau associatif contenant les paramètres GET
+*/
+
+function extractUrlParams(){	
+
+
+	var t = location.search.substring(1).split('&');
+	var f = [];
+	
+	for (var i=0; i<t.length; i++){
+		var x = t[ i ].split('=');
+		f[x[0]]=x[1];
+	}
+	
+	return f;
+}
+
+//http://localhost:8888/map.html?xpos=59.32522&ypos=18.07002&x=59.327383&y=18.06747
+  var param=extractUrlParams();
+  //alert(param['xpos'] +' '+param['ypos']);
+  //alert(param['x'] +' '+param['y']);
+  
+  var stockholm = new google.maps.LatLng(param['xpos'],param['ypos']);
+  var parliament = new google.maps.LatLng(param['x'] ,param['y']);
+  var marker;
+  var map;
+
+  function initialize() {
+    var mapOptions = {
+      zoom: 13,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: stockholm
+    };
+
+    map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+          
+    marker = new google.maps.Marker({
+      map:map,
+      draggable:true,
+      animation: google.maps.Animation.DROP,
+      position: parliament
+    });
+    
+    
+    // Add a Circle overlay to the map.
+    // http://code.google.com/intl/fr-FR/apis/maps/documentation/javascript/reference.html#CircleOptions
+    var circle = new google.maps.Circle({
+          map: map,
+          radius: 500, 
+          fillColor : "#dc0707",
+          fillOpacity : 0.4,
+          strokeColor : "#dc0707",          
+          strokeOpacity : 1
+        });
+    
+      
+    circle.bindTo('center', marker, 'position');
+    
+    google.maps.event.addListener(marker, 'click', toggleBounce);
+    
+    
+  }
+
+  function toggleBounce() {
+
+    if (marker.getAnimation() != null) {
+      marker.setAnimation(null);
+    } else {
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+  }
+</script>
+</head>
+<body onload="initialize()" >
+<div id="map_canvas" style="width:790px; height: 500px;">map div</div>
+</body>
+</html>
