@@ -5,11 +5,10 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
+import  javax.cache.Cache;
+import  javax.cache.CacheManager;
+import  javax.cache.CacheException;
 
-
-import net.sf.jsr107cache.Cache;
-import net.sf.jsr107cache.CacheException;
-import net.sf.jsr107cache.CacheManager;
 
 import org.shm.crawley.domain.Latitude;
 import org.shm.crawley.helper.MapperHelper;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ocpsoft.pretty.time.PrettyTime;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import org.shm.crawley.domain.Latitude;
 
