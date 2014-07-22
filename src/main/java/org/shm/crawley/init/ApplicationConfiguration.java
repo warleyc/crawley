@@ -66,6 +66,7 @@ public class ApplicationConfiguration {
         }
         return cache;
     }
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer properties() {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();

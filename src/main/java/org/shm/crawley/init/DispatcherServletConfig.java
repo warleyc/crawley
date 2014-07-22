@@ -34,74 +34,74 @@ import java.util.logging.Logger;
 @EnableWebMvc
 public class DispatcherServletConfig extends WebMvcConfigurerAdapter {
 
-	private final Logger logger = Logger
-			.getLogger(DispatcherServletConfig.class.getName());
+    private final Logger logger = Logger
+            .getLogger(DispatcherServletConfig.class.getName());
 
-	@Inject
-	private Environment env;
+    @Inject
+    private Environment env;
 
-	@PostConstruct
-	public void init() throws IOException {
-		logger.info("DispatcherServletConfig started! :" + env);
-	}
-
-	
-	  @Bean
-	    public ViewResolver ContentNegotiatingViewResolver() {
-	        ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver();
-	        List<ViewResolver> viewResolvers = new ArrayList<ViewResolver>();
-
-	        UrlBasedViewResolver urlBasedViewResolver = new UrlBasedViewResolver();
-	        urlBasedViewResolver.setViewClass(JstlView.class);
-	        urlBasedViewResolver.setPrefix("/views/");
-	        urlBasedViewResolver.setSuffix(".jsp");
-	        viewResolvers.add(urlBasedViewResolver);
-
-	        viewResolver.setViewResolvers(viewResolvers);
-
-          List<View> defaultViews = new ArrayList<View>();
-          defaultViews.add(new MappingJackson2JsonView());
-          viewResolver.setDefaultViews(defaultViews);
-
-	        return viewResolver;
-	    }
+    @PostConstruct
+    public void init() throws IOException {
+        logger.info("DispatcherServletConfig started! :" + env);
+    }
 
 
-	@Bean
-	public MessageSource messageSource() {
-		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-		messageSource.setBasename("/messages/messages");
-		messageSource.setDefaultEncoding("UTF-8");
-		return messageSource;
-	}
+    @Bean
+    public ViewResolver ContentNegotiatingViewResolver() {
+        ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver();
+        List<ViewResolver> viewResolvers = new ArrayList<ViewResolver>();
 
-	@Bean
-	LocaleChangeInterceptor localeChangeInterceptor() {
-		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-		interceptor.setParamName("language");
-		return interceptor;
-	}
+        UrlBasedViewResolver urlBasedViewResolver = new UrlBasedViewResolver();
+        urlBasedViewResolver.setViewClass(JstlView.class);
+        urlBasedViewResolver.setPrefix("/views/");
+        urlBasedViewResolver.setSuffix(".jsp");
+        viewResolvers.add(urlBasedViewResolver);
 
-	@Bean
-	LocaleResolver localeResolver() {
-		return new SessionLocaleResolver();
-	}
+        viewResolver.setViewResolvers(viewResolvers);
 
-	@Bean
-	HandlerMapping handlerMapping() {
-		SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
-		mapping.setInterceptors(new HandlerInterceptor[] { localeChangeInterceptor() });
-		return mapping;
-	}
+        List<View> defaultViews = new ArrayList<View>();
+        defaultViews.add(new MappingJackson2JsonView());
+        viewResolver.setDefaultViews(defaultViews);
 
-	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(localeChangeInterceptor());
+        return viewResolver;
+    }
+
+
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("/messages/messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+
+    @Bean
+    LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("language");
+        return interceptor;
+    }
+
+    @Bean
+    LocaleResolver localeResolver() {
+        return new SessionLocaleResolver();
+    }
+
+    @Bean
+    HandlerMapping handlerMapping() {
+        SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+        mapping.setInterceptors(new HandlerInterceptor[]{localeChangeInterceptor()});
+        return mapping;
+    }
+
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
         registry.addInterceptor(new DeviceResolverHandlerInterceptor());
         registry.addInterceptor(new SitePreferenceHandlerInterceptor());
-	}
-	
-	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-		argumentResolvers.add(new DeviceHandlerMethodArgumentResolver());		
-	}
+    }
+
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new DeviceHandlerMethodArgumentResolver());
+    }
 
 }

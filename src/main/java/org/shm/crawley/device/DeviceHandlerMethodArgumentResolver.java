@@ -10,13 +10,13 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 public class DeviceHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-	public boolean supportsParameter(MethodParameter parameter) {
-		return Device.class.isAssignableFrom(parameter.getParameterType());
-	}
+    public boolean supportsParameter(MethodParameter parameter) {
+        return Device.class.isAssignableFrom(parameter.getParameterType());
+    }
 
-	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest request,
-			WebDataBinderFactory binderFactory) throws Exception {
-		return DeviceUtils.getCurrentDevice(request);
-	}
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest request,
+                                  WebDataBinderFactory binderFactory) throws Exception {
+        return DeviceUtils.getCurrentDevice(request);
+    }
 
 }

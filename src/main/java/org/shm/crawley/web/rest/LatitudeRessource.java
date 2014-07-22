@@ -23,7 +23,7 @@ public class LatitudeRessource {
      * @param locale
      * @return
      */
-    @RequestMapping(value = "/rest/latitude",method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/latitude", method = RequestMethod.GET)
     @ResponseBody
     public Latitude findLastPosition(Locale locale) {
         log.info("findLastPosition()");

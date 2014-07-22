@@ -1,91 +1,87 @@
 package org.shm.crawley.services;
 
-import java.util.Collections;
-import java.util.Locale;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-import  javax.cache.Cache;
-import  javax.cache.CacheManager;
-import  javax.cache.CacheException;
-
-
 import org.shm.crawley.domain.Latitude;
 import org.shm.crawley.helper.MapperHelper;
 import org.shm.crawley.repository.LatitudeRepository;
 import org.springframework.stereotype.Service;
 
+import javax.cache.Cache;
+import javax.cache.CacheException;
+import javax.cache.CacheManager;
+import javax.inject.Inject;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.logging.Logger;
 
 
 @Service
 public class LatitudeService {
 
-	private static final Logger log = Logger.getLogger(LatitudeService.class
-			.getName());
+    private static final Logger log = Logger.getLogger(LatitudeService.class
+            .getName());
 
-	@Inject
-	LatitudeRepository latitudeRepository;
+    @Inject
+    LatitudeRepository latitudeRepository;
 
-	@Inject
-	MapperHelper mapperHelper;
+    @Inject
+    MapperHelper mapperHelper;
 
-	//@Inject
-	Cache cache;
+    //@Inject
+    Cache cache;
 
     @Inject
     FoursquareService foursquareService;
 
-	static final Long UID = (long) 5654;
+    static final Long UID = (long) 5654;
 
     /**
-     *
      * @param o
      */
-	private void saveLatitude(Latitude o) {
-		o.setId(UID);
-		latitudeRepository.create(o);
-		addLatitudeInCache(o);
-	}
+    private void saveLatitude(Latitude o) {
+        o.setId(UID);
+        latitudeRepository.create(o);
+        addLatitudeInCache(o);
+    }
 
 
-	private Latitude getLatitudeFromCache() {
-		checkCache();
-		return  (Latitude) cache.get(UID);
-	}
+    private Latitude getLatitudeFromCache() {
+        checkCache();
+        return (Latitude) cache.get(UID);
+    }
 
-	private void addLatitudeInCache(Latitude latitude) {
-		// utilisqation de mem cache??
-		// un process pour sauver mem cache?
-		checkCache();
+    private void addLatitudeInCache(Latitude latitude) {
+        // utilisqation de mem cache??
+        // un process pour sauver mem cache?
+        checkCache();
 
-		cache.put(UID, latitude);
+        cache.put(UID, latitude);
 
-	}
+    }
 
-	private void checkCache() {
-		if (cache == null) {
-			try {
-				cache = CacheManager.getInstance().getCacheFactory()
-						.createCache(Collections.emptyMap());
-			} catch (CacheException e) {
-				log.severe("probleme sur la gestion du cache"+e.getMessage());
-			}
-		}
-	}
-
+    private void checkCache() {
+        if (cache == null) {
+            try {
+                cache = CacheManager.getInstance().getCacheFactory()
+                        .createCache(Collections.emptyMap());
+            } catch (CacheException e) {
+                log.severe("probleme sur la gestion du cache" + e.getMessage());
+            }
+        }
+    }
 
 
     public Latitude findLastPosition(Locale locale) {
         log.info("findLastPositionV4 Begin");
-        Latitude  newLatitude=foursquareService.searchCheckins(locale);
+        Latitude newLatitude = foursquareService.searchCheckins(locale);
 
+        log.info("newLatitude from foursquare:" + newLatitude);
 
-        if (newLatitude!=null) {
+        if (newLatitude != null) {
             saveLatitude(newLatitude);
         } else {
             newLatitude = getLatitudeFromCache();
 
-            log.info("latitude from cache" + newLatitude);
+            log.info("latitude from cache:" + newLatitude);
             if (newLatitude == null) {
                 newLatitude = latitudeRepository.findById(UID);
                 log.info("latitude from database=" + newLatitude);
@@ -94,9 +90,9 @@ public class LatitudeService {
             }
 
             // update since
-            if (newLatitude!=null && newLatitude.getTimeStamp() != null) {
+            if (newLatitude != null && newLatitude.getTimeStamp() != null) {
                 newLatitude.setSince(MapperHelper.getPrettyTime(newLatitude
-                        .getTimeStamp(),locale));
+                        .getTimeStamp(), locale));
             }
 
         }
@@ -104,7 +100,6 @@ public class LatitudeService {
         return newLatitude;
 
     }
-
 
 
 }

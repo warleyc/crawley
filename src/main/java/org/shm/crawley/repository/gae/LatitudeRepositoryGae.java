@@ -1,73 +1,73 @@
 package org.shm.crawley.repository.gae;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-
 import org.shm.crawley.domain.Latitude;
 import org.shm.crawley.repository.LatitudeRepository;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+
 
 @Repository
 @Transactional
-public class LatitudeRepositoryGae implements LatitudeRepository{
-	
-	@PersistenceContext
-	private EntityManager em;
+public class LatitudeRepositoryGae implements LatitudeRepository {
 
-	public EntityManager getEm() {
-		return em;
-	}
+    @PersistenceContext
+    private EntityManager em;
 
-	public void setEm(EntityManager em) {
-		this.em = em;
-	}
-	
-	public Latitude create(Latitude o) {
+    public EntityManager getEm() {
+        return em;
+    }
 
-		try {
-			em.persist(o);
-		} finally {
-			em.close();
-		}
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
 
-		return o;
-	}
+    public Latitude create(Latitude o) {
 
-	public void saveOrUpdate(Latitude o) {
-			em.merge(o);
-	}
+        try {
+            em.persist(o);
+        } finally {
+            em.close();
+        }
 
-	public Latitude read(Long id) {
-		return em.find(Latitude.class,id);
-	}
+        return o;
+    }
 
-	public void update(Latitude o) {
-		em.merge(o);
-	}
+    public void saveOrUpdate(Latitude o) {
+        em.merge(o);
+    }
 
-	public void delete(Latitude o) {
-		em.remove(o);
-	}
+    public Latitude read(Long id) {
+        return em.find(Latitude.class, id);
+    }
 
-	public int deleteById(Long id) {
+    public void update(Latitude o) {
+        em.merge(o);
+    }
 
-		String find = "delete From Latitude t where id= :id";
-		Query query = em.createQuery(find);
-		query.setParameter("id", id);
-		return query.executeUpdate();
-	}
+    public void delete(Latitude o) {
+        em.remove(o);
+    }
 
-	/**
-	 * @param id
-	 * @return
-	 * @throws DataAccessException
-	 */
-	public Latitude findById(Long id) {
-		return  em.find(Latitude.class, id);
-	}
+    public int deleteById(Long id) {
+
+        String find = "delete From Latitude t where id= :id";
+        Query query = em.createQuery(find);
+        query.setParameter("id", id);
+        return query.executeUpdate();
+    }
+
+    /**
+     * @param id
+     * @return
+     * @throws DataAccessException
+     */
+    public Latitude findById(Long id) {
+        return em.find(Latitude.class, id);
+    }
 
 }

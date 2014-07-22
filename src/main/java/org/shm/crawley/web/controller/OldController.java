@@ -35,8 +35,6 @@ public class OldController {
     }
 
 
-
-
     @RequestMapping("/mobile/shm.do")
     public ModelAndView shmMobile(ModelMap model) {
         ModelAndView mav = new ModelAndView();
@@ -52,7 +50,7 @@ public class OldController {
         return mav;
     }
 
-      @RequestMapping("/updateLocation.do")
+    @RequestMapping("/updateLocation.do")
     public ModelAndView updatelocation(Locale locale) {
         ModelAndView mav = new ModelAndView("mobile/geolocalisation");
         Latitude latitude = latitudeService.findLastPosition(locale);
